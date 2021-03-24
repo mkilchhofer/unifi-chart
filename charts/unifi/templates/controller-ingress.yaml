@@ -2,7 +2,7 @@
 {{- $fullName := include "unifi.fullname" . -}}
 {{- $ingressPath := .Values.controllerService.ingress.path -}}
 {{- $unifiedServiceEnabled := .Values.unifiedService.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}-controller
@@ -32,8 +32,11 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
+            pathType: Prefix
             backend:
-              serviceName: {{ $fullName }}-controller
-              servicePort: controller
+              service:
+                name: {{ $fullName }}-controller
+                port:
+                  name: controller
   {{- end }}
 {{- end }}
