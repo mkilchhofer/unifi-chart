@@ -1,19 +1,17 @@
 apiVersion: v2
-appVersion: v6.0.45
+appVersion: v7.5.176
 kubeVersion: ">=1.18-0"
 description: Ubiquiti Network's Unifi Controller
 name: unifi
-version: 1.6.0
+version: 1.7.0
 keywords:
   - ubiquiti
   - unifi
   - mongodb
-home: https://github.com/k8s-at-home/charts/tree/master/charts/unifi
+home: https://github.com/mkilchhofer/unifi-chart
 icon: https://blog.ubnt.com/wp-content/uploads/2016/10/unifi-app-logo.png
 sources:
   - https://github.com/jacobalberty/unifi-docker
 maintainers:
-  - name: billimek
-    email: jeff@billimek.com
-  - name: mcronce
-    email: mike@quadra-tec.net
+  - name: mkilchhofer
+    url: https://github.com/mkilchhofer/
