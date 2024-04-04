@@ -154,7 +154,7 @@ ingress:
 | guiService.type | string | `"ClusterIP"` | Kubernetes service type |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"jacobalberty/unifi"` |  |
-| image.tag | string | `"5.14.23"` |  |
+| image.tag | string | `"v5.14.23"` |  |
 | ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
 | jvmInitHeapSize | string | `nil` | Java Virtual Machine (JVM) initial, and minimum, heap size Unset value means there is no lower limit |
 | jvmMaxHeapSize | string | `"1024M"` | Java Virtual Machine (JVM) maximum heap size For larger installations a larger value is recommended. For memory constrained system this value can be lowered. |
