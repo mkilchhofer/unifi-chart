@@ -1,0 +1,81 @@
+## Reference: https://github.com/helm/chart-testing-action
+name: Linting and Testing
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  linter-artifacthub:
+    runs-on: ubuntu-latest
+    container:
+      image: public.ecr.aws/artifacthub/ah:v1.14.0
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+
+      - name: Run ah lint
+        working-directory: ./charts
+        run: ah lint
+
+  chart-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Helm
+        uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 # v3.5
+        with:
+          version: v3.10.1 # Also update in publish.yaml
+
+      - name: Set up python
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        with:
+          python-version: 3.9
+
+      - name: Setup Chart Linting
+        id: lint
+        uses: helm/chart-testing-action@e6669bcd63d7cb57cb4380c33043eebe5d111992 # v2.6.1
+        with:
+          # Note: Also update in scripts/lint.sh
+          version: v3.10.0
+
+      - name: List changed charts
+        id: list-changed
+        run: |
+          ## If executed with debug this won't work anymore.
+          changed=$(ct --config ./.github/configs/ct-lint.yaml list-changed)
+          charts=$(echo "$changed" | tr '\n' ' ' | xargs)
+          if [[ -n "$changed" ]]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "changed_charts=$charts" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run chart-testing (lint)
+        run: ct lint --debug --config ./.github/configs/ct-lint.yaml --lint-conf ./.github/configs/lintconf.yaml
+
+      - name: Run docs-testing (helm-docs)
+        id: helm-docs
+        run: |
+          ./scripts/helm-docs.sh
+          if [[ $(git diff --stat) != '' ]]; then
+            echo -e '\033[0;31mDocumentation outdated!\033[0m ❌'
+            git diff --color
+            exit 1
+          else
+            echo -e '\033[0;32mDocumentation up to date\033[0m ✔'
+          fi
+
+      - name: Create kind cluster
+        uses: helm/kind-action@99576bfa6ddf9a8e612d83b513da5a75875caced # v1.9.0
+        if: steps.list-changed.outputs.changed == 'true'
+        with:
+          config: .github/configs/kind-config.yaml
+
+      - name: Run chart-testing (install)
+        run: ct install --config ./.github/configs/ct-install.yaml
+        if: steps.list-changed.outputs.changed == 'true'
