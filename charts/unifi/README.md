@@ -1,7 +1,5 @@
 # unifi
 
-![Version: 1.5.3](https://img.shields.io/badge/Version-1.5.3-informational?style=flat-square) ![AppVersion: 5.14.23](https://img.shields.io/badge/AppVersion-5.14.23-informational?style=flat-square)
-
 Ubiquiti Network's Unifi Controller
 
 **This chart is not maintained by the upstream project and any issues with the chart should be raised [here](https://github.com/k8s-at-home/charts/issues/new/choose)**
@@ -113,7 +111,7 @@ ingress:
 | affinity | object | `{}` |  |
 | captivePortalService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | captivePortalService.enabled | bool | `false` |  |
-| captivePortalService.externalTrafficPolicy | string | `"Cluster"` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
+| captivePortalService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | captivePortalService.http | int | `8880` | Kubernetes port where the http service is exposed |
 | captivePortalService.https | int | `8843` | Kubernetes port where the https service is exposed |
 | captivePortalService.ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
@@ -123,7 +121,7 @@ ingress:
 | captivePortalService.type | string | `"ClusterIP"` | Kubernetes service type |
 | controllerService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | controllerService.enabled | bool | `false` |  |
-| controllerService.externalTrafficPolicy | string | `"Cluster"` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
+| controllerService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | controllerService.ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
 | controllerService.labels | object | `{}` |  |
 | controllerService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
@@ -134,7 +132,7 @@ ingress:
 | deploymentAnnotations | object | `{}` |  |
 | discoveryService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | discoveryService.enabled | bool | `false` |  |
-| discoveryService.externalTrafficPolicy | string | `"Cluster"` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
+| discoveryService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | discoveryService.ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
 | discoveryService.labels | object | `{}` |  |
 | discoveryService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
@@ -147,7 +145,7 @@ ingress:
 | extraVolumes | list | `[]` |  |
 | guiService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | guiService.enabled | bool | `false` |  |
-| guiService.externalTrafficPolicy | string | `"Cluster"` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
+| guiService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | guiService.labels | object | `{}` |  |
 | guiService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | guiService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
@@ -156,7 +154,7 @@ ingress:
 | guiService.type | string | `"ClusterIP"` | Kubernetes service type |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"jacobalberty/unifi"` |  |
-| image.tag | string | `"5.14.23"` |  |
+| image.tag | string | `"v5.14.23"` |  |
 | ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
 | jvmInitHeapSize | string | `nil` | Java Virtual Machine (JVM) initial, and minimum, heap size Unset value means there is no lower limit |
 | jvmMaxHeapSize | string | `"1024M"` | Java Virtual Machine (JVM) maximum heap size For larger installations a larger value is recommended. For memory constrained system this value can be lowered. |
@@ -165,7 +163,7 @@ ingress:
 | mongodb | object | `{"databaseName":"unifi","dbUri":"mongodb://mongo/unifi","enabled":false,"statDbUri":"mongodb://mongo/unifi_stat"}` | define an external mongoDB instead of using the built-in mongodb |
 | nodeSelector | object | `{}` |  |
 | persistence.accessMode | string | `"ReadWriteOnce"` | Persistence access modes |
-| persistence.enabled | bool | `true` | Use persistent volume to store data |
+| persistence.enabled | bool | `false` | Use persistent volume to store data |
 | persistence.existingClaim | string | `nil` | Use an existing PVC to persist data |
 | persistence.size | string | `"5Gi"` | Size of persistent volume claim |
 | persistence.skipuninstall | bool | `false` | Do not delete the pvc upon helm uninstall |
@@ -176,7 +174,7 @@ ingress:
 | runAsRoot | bool | `false` |  |
 | speedtestService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | speedtestService.enabled | bool | `false` |  |
-| speedtestService.externalTrafficPolicy | string | `"Cluster"` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
+| speedtestService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | speedtestService.labels | object | `{}` |  |
 | speedtestService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | speedtestService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
@@ -185,7 +183,7 @@ ingress:
 | strategyType | string | `"Recreate"` | upgrade strategy type (e.g. Recreate or RollingUpdate) |
 | stunService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | stunService.enabled | bool | `false` |  |
-| stunService.externalTrafficPolicy | string | `"Cluster"` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
+| stunService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | stunService.labels | object | `{}` |  |
 | stunService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | stunService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
@@ -193,7 +191,7 @@ ingress:
 | stunService.type | string | `"NodePort"` | Kubernetes service type |
 | syslogService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | syslogService.enabled | bool | `false` |  |
-| syslogService.externalTrafficPolicy | string | `"Cluster"` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
+| syslogService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | syslogService.labels | object | `{}` |  |
 | syslogService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | syslogService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
@@ -203,34 +201,12 @@ ingress:
 | tolerations | list | `[]` |  |
 | unifiedService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | unifiedService.enabled | bool | `false` |  |
-| unifiedService.externalTrafficPolicy | string | `"Cluster"` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
+| unifiedService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | unifiedService.labels | object | `{}` |  |
 | unifiedService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | unifiedService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | unifiedService.nodePort | int | `nil` | Specify the nodePort value for the LoadBalancer and NodePort service types. ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport |
 | unifiedService.type | string | `"ClusterIP"` | Kubernetes service type |
-
-## Changelog
-
-All notable changes to this application Helm chart will be documented in this file but does not include changes from our common library. To read those click [here](https://github.com/k8s-at-home/charts/tree/master/charts/common/README.md#Changelog).
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-### [1.5.3]
-
-#### Added
-
-- N/A
-
-#### Changed
-
-- Use helm-docs
-
-#### Removed
-
-- N/A
-
-[1.5.3]: #1.5.3
 
 ## Support
 
@@ -240,4 +216,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Join our [Discord](https://discord.gg/sTMX7Vh) community
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)
+Autogenerated from chart metadata using [helm-docs v1.9.1](https://github.com/norwoodj/helm-docs/releases/v1.9.1)

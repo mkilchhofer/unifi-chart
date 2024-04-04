@@ -66,6 +66,52 @@ The command removes all the Kubernetes components associated with the chart **in
 ## Configuration
 {{- end -}}
 
+{{- define "custom.custom.configuration.header" -}}
+## Custom configuration
+{{- end -}}
+
+{{- define "custom.custom.configuration" -}}
+{{ template "custom.custom.configuration.header" . }}
+
+### Regarding the services
+
+- `guiService`: Represents the main web UI and is what one would normally point
+  the ingress to.
+- `captivePortalService`: This service is used to allow the captive portal webpage
+  to be accessible. It needs to be reachable by the clients connecting to your guest
+  network.
+- `controllerService`: This is needed in order for the unifi devices to talk to
+  the controller and must be otherwise exposed to the network where the unifi
+  devices run. If you run this as a `NodePort` (the default setting), make sure
+  that there is an external load balancer that is directing traffic from port
+  8080 to the `NodePort` for this service.
+- `discoveryService`: This needs to be reachable by the unifi devices on the
+  network similar to the controller `Service` but only during the discovery
+  phase. This is a UDP service.
+- `stunService`: Also used periodically by the unifi devices to communicate
+  with the controller using UDP. See [this article][ubnt 3] and [this other
+  article][ubnt 4] for more information.
+- `syslogService`: Used to capture syslog from Unifi devices if the feature is 
+  enabled in the site configuration. This needs to be reachable by Unifi devices
+  on port 5514/UDP.
+- `speedtestService`: Used for mobile speedtest inside the UniFi Mobile app.
+  This needs to be reachable by clients connecting to port 6789/TCP.
+
+### Ingress and HTTPS
+
+Unifi does [not support HTTP][unifi] so if you wish to use the guiService, you
+need to ensure that you use a backend transport of HTTPS.
+
+An example entry in `values.yaml` to achieve this is as follows:
+
+```
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+```
+{{- end -}}
+
 {{- define "custom.configuration.readValues" -}}
 Read through the [values.yaml](./values.yaml) file. It has several commented out suggested values.
 Other values may be used from the [values.yaml](../common/values.yaml) from the [common library](../common).
@@ -108,8 +154,6 @@ helm install {{ template "chart.name" . }} {{ template "custom.helm.path" . }} -
 
 {{ template "chart.header" . }}
 
-{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
-
 {{ template "chart.description" . }}
 
 {{ template "custom.notes" . }}
@@ -137,8 +181,6 @@ helm install {{ template "chart.name" . }} {{ template "custom.helm.path" . }} -
 {{ template "custom.custom.configuration" . }}
 
 {{ template "custom.valuesSection" . }}
-
-{{ template "custom.changelog" . }}
 
 {{ template "custom.support" . }}
 

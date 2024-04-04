@@ -1,0 +1,21 @@
+## Reference: https://github.com/pascalgn/size-label-action
+name: 'PR Labeling'
+
+on: 
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  size-label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pascalgn/size-label-action@37a5ad4ae20ea8032abf169d953bcd661fd82cd3 # v0.5.0
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
