@@ -3,7 +3,7 @@
 {{- $ingressPath := .Values.captivePortalService.ingress.path -}}
 {{- $unifiedServiceEnabled := .Values.unifiedService.enabled -}}
 {{- $captivePortalHttps := .Values.captivePortalService.https -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}-captive
@@ -28,17 +28,20 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-  {{- range .Values.captivePortalService.ingress.hosts }}
+    {{- range .Values.captivePortalService.ingress.hosts }}
     - host: {{ . }}
       http:
         paths:
           - path: {{ $ingressPath }}
+            pathType: Prefix
             backend:
-              serviceName: {{ $fullName }}-captiveportalservice
-              {{- if $captivePortalHttps }}
-              servicePort: captive-https
-              {{- else }}
-              servicePort: captive-http
-              {{- end }}
-  {{- end }}
+              service:
+                name: {{ $fullName }}-captiveportalservice
+                port:
+                  {{- if $captivePortalHttps }}
+                  name: captive-https
+                  {{- else }}
+                  name: captive-http
+                  {{- end }}
+    {{- end }}
 {{- end }}

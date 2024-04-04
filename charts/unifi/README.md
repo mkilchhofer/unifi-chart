@@ -10,6 +10,8 @@ Ubiquiti Network's Unifi Controller
 
 ## Requirements
 
+Kubernetes: `>=1.18-0`
+
 ## Dependencies
 
 | Repository | Name | Version |
