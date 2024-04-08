@@ -11,6 +11,9 @@ metadata:
   labels:
     {{- include "unifi.labels" . | nindent 4 }}
 spec:
+  {{- with .Values.ingress.ingressClassName }}
+  ingressClassName: {{ . }}
+  {{- end }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ . }}
