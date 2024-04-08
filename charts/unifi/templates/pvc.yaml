@@ -3,6 +3,10 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "unifi.fullname" . }}
+  {{- if .Values.persistence.skipuninstall }}
+  annotations:
+    helm.sh/resource-policy: keep
+  {{- end }}
   labels:
     {{- include "unifi.labels" . | nindent 4 }}
 spec:
