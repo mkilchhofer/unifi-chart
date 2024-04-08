@@ -4,10 +4,7 @@ apiVersion: v1
 metadata:
   name: {{ template "unifi.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "unifi.labels" . | nindent 4 }}
 data:
-{{ toYaml .Values.extraConfigFiles | indent 2 }}
+  {{- toYaml .Values.extraConfigFiles | nindent 2 }}
 {{- end }}

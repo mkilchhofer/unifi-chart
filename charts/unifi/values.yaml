@@ -47,7 +47,7 @@ unifiedService:
 
 guiService:
   # -- Enable service for the main web UI
-  enabled: false
+  enabled: true
   # -- Kubernetes service type
   type: ClusterIP
   # -- Kubernetes port where the service is exposed
@@ -72,7 +72,7 @@ guiService:
 
 captivePortalService:
   # -- Enable service for the captive portal webpage
-  enabled: false
+  enabled: true
   # -- Kubernetes service type
   type: ClusterIP
   # -- Kubernetes port where the http service is exposed
@@ -109,7 +109,7 @@ captivePortalService:
 
 controllerService:
   # -- Enable service for the controller
-  enabled: false
+  enabled: true
   # -- Kubernetes service type
   type: NodePort
   # -- Kubernetes port where the service is exposed
@@ -144,7 +144,7 @@ controllerService:
 
 stunService:
   # -- Enable service the STUN feature
-  enabled: false
+  enabled: true
   # -- Kubernetes service type
   type: NodePort
   # -- Kubernetes port where the service is exposed
@@ -165,7 +165,7 @@ stunService:
 
 discoveryService:
   # -- Enable service for the discovery feature
-  enabled: false
+  enabled: true
   # -- Kubernetes service type
   type: NodePort
   # -- Kubernetes port where the service is exposed
@@ -202,7 +202,7 @@ discoveryService:
 syslogService:
   # -- Enable service for the syslog server.
   # Used to capture syslog from Unifi devices if the feature is enabled in the site configuration.
-  enabled: false
+  enabled: true
   # -- Kubernetes service type
   type: NodePort
   # -- Kubernetes port where the service is exposed
@@ -223,7 +223,7 @@ syslogService:
 
 speedtestService:
   # -- Enable service for mobile speedtest inside the UniFi Mobile app
-  enabled: false
+  enabled: true
   # -- Kubernetes service type
   type: ClusterIP
   # -- Kubernetes port where the service is exposed
@@ -246,7 +246,7 @@ speedtestService:
 ## Ingress settings
 ingress:
   # -- Enable Ingress resource
-  enabled: false
+  enabled: true
   # -- Annotations for Ingress resource
   annotations: {}
   # -- Ingress path
@@ -256,6 +256,9 @@ ingress:
     - chart-example.local
   # -- Ingress TLS configuration
   tls: []
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
 
 # -- Timezone for UniFi controller
 timezone: UTC
@@ -314,10 +317,10 @@ mongodb:
 persistence:
   # -- Use persistent volume to store data
   enabled: false
-  # -- (string) Type of persistent volume claim
-  storageClass:
-  # -- (string) Use an existing PVC to persist data
-  existingClaim:
+  # -- Storage Class to use for the PVC
+  storageClass: ""
+  # -- Use an existing PVC to persist data
+  existingClaim: ""
   # -- Persistence access modes
   accessMode: ReadWriteOnce
   # -- Size of persistent volume claim

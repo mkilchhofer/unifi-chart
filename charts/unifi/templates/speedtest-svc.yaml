@@ -1,26 +1,23 @@
-{{ if not .Values.unifiedService.enabled }}
+{{- if and .Values.speedtestService.enabled (not .Values.unifiedService.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "unifi.fullname" . }}-speedtest
   labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.speedtestService.labels }}
-{{ toYaml .Values.speedtestService.labels | indent 4 }}
-{{- end }}
-{{- with .Values.speedtestService.annotations }}
+    {{- include "unifi.labels" . | nindent 4 }}
+    {{- if .Values.speedtestService.labels }}
+    {{- toYaml .Values.speedtestService.labels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.speedtestService.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
 {{- if (or (eq .Values.speedtestService.type "ClusterIP") (empty .Values.speedtestService.type)) }}
   type: ClusterIP
   {{- if .Values.speedtestService.clusterIP }}
   clusterIP: {{ .Values.speedtestService.clusterIP }}
-  {{end}}
+  {{- end }}
 {{- else if eq .Values.speedtestService.type "LoadBalancer" }}
   type: {{ .Values.speedtestService.type }}
   {{- if .Values.speedtestService.loadBalancerIP }}
@@ -28,15 +25,15 @@ spec:
   {{- end }}
   {{- if .Values.speedtestService.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-{{ toYaml .Values.speedtestService.loadBalancerSourceRanges | indent 4 }}
+    {{- toYaml .Values.speedtestService.loadBalancerSourceRanges | nindent 4 }}
   {{- end -}}
 {{- else }}
   type: {{ .Values.speedtestService.type }}
 {{- end }}
-{{- if .Values.speedtestService.externalIPs }}
+  {{- if .Values.speedtestService.externalIPs }}
   externalIPs:
-{{ toYaml .Values.speedtestService.externalIPs | indent 4 }}
-{{- end }}
+    {{- toYaml .Values.speedtestService.externalIPs | nindent 4 }}
+  {{- end }}
   {{- if .Values.speedtestService.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.speedtestService.externalTrafficPolicy }}
   {{- end }}
@@ -45,9 +42,9 @@ spec:
       targetPort: speedtest
       protocol: TCP
       name: speedtest
-{{ if (and (eq .Values.speedtestService.type "NodePort") (not (empty .Values.speedtestService.nodePort))) }}
+      {{- if (and (eq .Values.speedtestService.type "NodePort") (not (empty .Values.speedtestService.nodePort))) }}
       nodePort: {{.Values.speedtestService.nodePort}}
-{{ end }}
+      {{- end }}
   selector:
     {{- include "unifi.selectorLabels" . | nindent 4 }}
-{{ end }}
+{{- end }}

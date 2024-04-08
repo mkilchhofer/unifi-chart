@@ -1,26 +1,23 @@
-{{ if not .Values.unifiedService.enabled }}
+{{- if and .Values.guiService.enabled (not .Values.unifiedService.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "unifi.fullname" . }}-gui
   labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.guiService.labels }}
-{{ toYaml .Values.guiService.labels | indent 4 }}
-{{- end }}
-{{- with .Values.guiService.annotations }}
+    {{- include "unifi.labels" . | nindent 4 }}
+    {{- if .Values.guiService.labels }}
+    {{- toYaml .Values.guiService.labels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.guiService.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
 {{- if (or (eq .Values.guiService.type "ClusterIP") (empty .Values.guiService.type)) }}
   type: ClusterIP
   {{- if .Values.guiService.clusterIP }}
   clusterIP: {{ .Values.guiService.clusterIP }}
-  {{end}}
+  {{- end }}
 {{- else if eq .Values.guiService.type "LoadBalancer" }}
   type: {{ .Values.guiService.type }}
   {{- if .Values.guiService.loadBalancerIP }}
@@ -28,15 +25,15 @@ spec:
   {{- end }}
   {{- if .Values.guiService.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-{{ toYaml .Values.guiService.loadBalancerSourceRanges | indent 4 }}
+    {{- toYaml .Values.guiService.loadBalancerSourceRanges | nindent 4 }}
   {{- end -}}
 {{- else }}
   type: {{ .Values.guiService.type }}
 {{- end }}
-{{- if .Values.guiService.externalIPs }}
+  {{- if .Values.guiService.externalIPs }}
   externalIPs:
-{{ toYaml .Values.guiService.externalIPs | indent 4 }}
-{{- end }}
+    {{- toYaml .Values.guiService.externalIPs | nindent 4 }}
+  {{- end }}
   {{- if .Values.guiService.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.guiService.externalTrafficPolicy }}
   {{- end }}
@@ -45,9 +42,9 @@ spec:
       port: {{ .Values.guiService.port }}
       protocol: TCP
       targetPort: https-gui
-{{ if (and (eq .Values.guiService.type "NodePort") (not (empty .Values.guiService.nodePort))) }}
+      {{- if (and (eq .Values.guiService.type "NodePort") (not (empty .Values.guiService.nodePort))) }}
       nodePort: {{.Values.guiService.nodePort}}
-{{ end }}
+      {{- end }}
   selector:
     {{- include "unifi.selectorLabels" . | nindent 4 }}
-{{ end }}
+{{- end }}

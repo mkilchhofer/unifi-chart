@@ -1,26 +1,23 @@
-{{ if .Values.unifiedService.enabled }}
+{{- if .Values.unifiedService.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "unifi.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.unifiedService.labels }}
-{{ toYaml .Values.unifiedService.labels | indent 4 }}
-{{- end }}
-{{- with .Values.unifiedService.annotations }}
+    {{- include "unifi.labels" . | nindent 4 }}
+    {{- if .Values.unifiedService.labels }}
+    {{- toYaml .Values.unifiedService.labels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.unifiedService.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
 {{- if (or (eq .Values.unifiedService.type "ClusterIP") (empty .Values.unifiedService.type)) }}
   type: ClusterIP
   {{- if .Values.unifiedService.clusterIP }}
   clusterIP: {{ .Values.unifiedService.clusterIP }}
-  {{end}}
+  {{- end }}
 {{- else if eq .Values.unifiedService.type "LoadBalancer" }}
   type: {{ .Values.unifiedService.type }}
   {{- if .Values.unifiedService.loadBalancerIP }}
@@ -28,15 +25,15 @@ spec:
   {{- end }}
   {{- if .Values.unifiedService.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-{{ toYaml .Values.unifiedService.loadBalancerSourceRanges | indent 4 }}
+    {{- toYaml .Values.unifiedService.loadBalancerSourceRanges | nindent 4 }}
   {{- end -}}
 {{- else }}
   type: {{ .Values.unifiedService.type }}
 {{- end }}
-{{- if .Values.unifiedService.externalIPs }}
+  {{- if .Values.unifiedService.externalIPs }}
   externalIPs:
-{{ toYaml .Values.unifiedService.externalIPs | indent 4 }}
-{{- end }}
+    {{- toYaml .Values.unifiedService.externalIPs | nindent 4 }}
+  {{- end }}
   {{- if .Values.unifiedService.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.unifiedService.externalTrafficPolicy }}
   {{- end }}
@@ -45,62 +42,61 @@ spec:
       targetPort: controller
       protocol: TCP
       name: controller
-{{ if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.controllerService.nodePort))) }}
+      {{- if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.controllerService.nodePort))) }}
       nodePort: {{.Values.controllerService.nodePort}}
-{{ end }}
+      {{- end }}
     - port: {{ .Values.discoveryService.port }}
       targetPort: discovery
       protocol: UDP
       name: discovery
-{{ if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.discoveryService.nodePort))) }}
+      {{- if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.discoveryService.nodePort))) }}
       nodePort: {{.Values.discoveryService.nodePort}}
-{{ end }}
+      {{- end }}
     - port: {{ .Values.stunService.port }}
       targetPort: stun
       protocol: UDP
       name: stun
-{{ if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.stunService.nodePort))) }}
+      {{- if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.stunService.nodePort))) }}
       nodePort: {{.Values.stunService.nodePort}}
-{{ end }}
+      {{- end }}
     - port: {{ .Values.syslogService.port }}
       targetPort: syslog
       protocol: UDP
       name: syslog
-{{ if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.syslogService.nodePort))) }}
+      {{- if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.syslogService.nodePort))) }}
       nodePort: {{.Values.syslogService.nodePort}}
-{{ end }}
+      {{- end }}
     - name: https-gui
       port: {{ .Values.guiService.port }}
       protocol: TCP
       targetPort: https-gui
-{{ if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.guiService.nodePort))) }}
+      {{- if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.guiService.nodePort))) }}
       nodePort: {{.Values.guiService.nodePort}}
-{{ end }}
-{{ if .Values.captivePortalService.enabled }}
+      {{- end }}
+    {{- if .Values.captivePortalService.enabled }}
     - name: captive-http
       port: {{ .Values.captivePortalService.http }}
       protocol: TCP
       targetPort: captive-http
-{{ if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.captivePortalService.http))) }}
+      {{- if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.captivePortalService.http))) }}
       nodePort: {{.Values.captivePortalService.http}}
-{{ end }}
+      {{- end }}
     - name: captive-https
       port: {{ .Values.captivePortalService.https }}
       protocol: TCP
       targetPort: captive-https
-{{ if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.captivePortalService.https))) }}
+      {{- if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.captivePortalService.https))) }}
       nodePort: {{.Values.captivePortalService.https}}
-{{ end }}
+      {{- end }}
+    {{- end }}
     - port: {{ .Values.speedtestService.port }}
       targetPort: speedtest
       protocol: TCP
       name: speedtest
-{{ if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.speedtestService.nodePort))) }}
+      {{- if (and (eq .Values.unifiedService.type "NodePort") (not (empty .Values.speedtestService.nodePort))) }}
       nodePort: {{.Values.speedtestService.nodePort}}
-{{ end }}
-{{ end }}
-
+      {{- end }}
   selector:
     {{- include "unifi.selectorLabels" . | nindent 4 }}
-{{ end }}
+{{- end }}
 

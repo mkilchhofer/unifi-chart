@@ -1,42 +1,37 @@
 {{- if (and .Values.controllerService.ingress.enabled (not .Values.unifiedService.enabled)) }}
 {{- $fullName := include "unifi.fullname" . -}}
-{{- $ingressPath := .Values.controllerService.ingress.path -}}
-{{- $unifiedServiceEnabled := .Values.unifiedService.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}-controller
-  labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- with .Values.controllerService.ingress.annotations }}
+  {{- with .Values.controllerService.ingress.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
-spec:
-{{- if .Values.controllerService.ingress.tls }}
-  tls:
-  {{- range .Values.controllerService.ingress.tls }}
-    - hosts:
-      {{- range .hosts }}
-        - {{ . | quote }}
-      {{- end }}
-      secretName: {{ .secretName }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
-{{- end }}
+  labels:
+    {{- include "unifi.labels" . | nindent 4 }}
+spec:
   rules:
-  {{- range .Values.controllerService.ingress.hosts }}
+    {{- range .Values.controllerService.ingress.hosts }}
     - host: {{ . }}
       http:
         paths:
-          - path: {{ $ingressPath }}
+          - path: {{ $.Values.controllerService.ingress.path }}
             pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}-controller
                 port:
                   name: controller
+    {{- end }}
+  {{- if .Values.controllerService.ingress.tls }}
+  tls:
+    {{- range .Values.controllerService.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . | quote }}
+      {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
   {{- end }}
 {{- end }}

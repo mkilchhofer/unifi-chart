@@ -1,26 +1,23 @@
-{{ if not .Values.unifiedService.enabled }}
+{{- if and .Values.syslogService.enabled (not .Values.unifiedService.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "unifi.fullname" . }}-syslog
   labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.syslogService.labels }}
-{{ toYaml .Values.syslogService.labels | indent 4 }}
-{{- end }}
-{{- with .Values.syslogService.annotations }}
+    {{- include "unifi.labels" . | nindent 4 }}
+    {{- if .Values.syslogService.labels }}
+    {{- toYaml .Values.syslogService.labels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.syslogService.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
 {{- if (or (eq .Values.syslogService.type "ClusterIP") (empty .Values.syslogService.type)) }}
   type: ClusterIP
   {{- if .Values.syslogService.clusterIP }}
   clusterIP: {{ .Values.syslogService.clusterIP }}
-  {{end}}
+  {{- end }}
 {{- else if eq .Values.syslogService.type "LoadBalancer" }}
   type: {{ .Values.syslogService.type }}
   {{- if .Values.syslogService.loadBalancerIP }}
@@ -28,15 +25,15 @@ spec:
   {{- end }}
   {{- if .Values.syslogService.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-{{ toYaml .Values.syslogService.loadBalancerSourceRanges | indent 4 }}
+    {{- toYaml .Values.syslogService.loadBalancerSourceRanges | nindent 4 }}
   {{- end -}}
 {{- else }}
   type: {{ .Values.syslogService.type }}
 {{- end }}
-{{- if .Values.syslogService.externalIPs }}
+  {{- if .Values.syslogService.externalIPs }}
   externalIPs:
-{{ toYaml .Values.syslogService.externalIPs | indent 4 }}
-{{- end }}
+    {{- toYaml .Values.syslogService.externalIPs | nindent 4 }}
+  {{- end }}
   {{- if .Values.syslogService.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.syslogService.externalTrafficPolicy }}
   {{- end }}
@@ -45,9 +42,9 @@ spec:
       targetPort: syslog
       protocol: UDP
       name: syslog
-{{ if (and (eq .Values.syslogService.type "NodePort") (not (empty .Values.syslogService.nodePort))) }}
+      {{- if (and (eq .Values.syslogService.type "NodePort") (not (empty .Values.syslogService.nodePort))) }}
       nodePort: {{.Values.syslogService.nodePort}}
-{{ end }}
+      {{- end }}
   selector:
     {{- include "unifi.selectorLabels" . | nindent 4 }}
-{{ end }}
+{{- end }}

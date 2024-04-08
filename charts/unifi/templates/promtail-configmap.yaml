@@ -4,10 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ template "unifi.fullname" . }}-promtail
   labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    {{- include "unifi.labels" . | nindent 4 }}
 data:
   promtail.yaml: |
     server:
