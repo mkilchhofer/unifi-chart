@@ -14,6 +14,12 @@ image:
   # -- Image pull policy. One of `Always`, `Never`, `IfNotPresent`
   pullPolicy: IfNotPresent
 
+# -- Set container-level security context. The parameter `bindPrivilegedPorts=true` will add the `SETFCAP` capability automatically.
+securityContext: {}
+
+# -- Set pod-level security context
+podSecurityContext: {}
+
 # If enabled, the controller, discovery, GUI, STUN and syslog services will not be
 # created.
 # Instead, one service will be created with the port and nodePort settings from
@@ -252,7 +258,8 @@ ingress:
 
 # -- Timezone for UniFi controller
 timezone: UTC
-
+# -- Allow listening on privileged ports. Required when `controllerService.port` or `guiService.port` is less than 1024.
+bindPrivilegedPorts: true
 # -- This is used to determine whether or not the UniFi service runs as a privileged (root) user. The default value is `true` but it is recommended to use `false` instead.
 runAsRoot: false
 # -- Set the UID (user id) the UniFi service runs as when `runAsRoot` is set to false

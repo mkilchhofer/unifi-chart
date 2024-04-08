@@ -28,6 +28,10 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       {{- if .Values.logging.promtail.enabled }}
         - name: {{ .Chart.Name }}-promtail
@@ -74,11 +78,9 @@ spec:
             - name: speedtest
               containerPort: 6789
               protocol: TCP
-          {{- if not .Values.runAsRoot }}
+          {{- with mergeOverwrite .Values.securityContext (include "unifi.securityContext.SETFCAP" . | fromYaml | default dict) }}
           securityContext:
-            capabilities:
-              add:
-                - SETFCAP
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
@@ -111,6 +113,8 @@ spec:
               value: "{{ .Values.guiService.port }}"
             - name: TZ
               value: "{{ .Values.timezone }}"
+            - name: BIND_PRIV
+              value: "{{ .Values.bindPrivilegedPorts }}"
             - name: RUNAS_UID0
               value: "{{ .Values.runAsRoot }}"
             - name: UNIFI_UID
