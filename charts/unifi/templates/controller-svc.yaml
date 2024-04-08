@@ -1,26 +1,23 @@
-{{ if not .Values.unifiedService.enabled }}
+{{- if and .Values.controllerService.enabled (not .Values.unifiedService.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "unifi.fullname" . }}-controller
   labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.controllerService.labels }}
-{{ toYaml .Values.controllerService.labels | indent 4 }}
-{{- end }}
-{{- with .Values.controllerService.annotations }}
+    {{- include "unifi.labels" . | nindent 4 }}
+    {{- if .Values.controllerService.labels }}
+    {{- toYaml .Values.controllerService.labels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.controllerService.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
 {{- if (or (eq .Values.controllerService.type "ClusterIP") (empty .Values.controllerService.type)) }}
   type: ClusterIP
   {{- if .Values.controllerService.clusterIP }}
   clusterIP: {{ .Values.controllerService.clusterIP }}
-  {{end}}
+  {{- end }}
 {{- else if eq .Values.controllerService.type "LoadBalancer" }}
   type: {{ .Values.controllerService.type }}
   {{- if .Values.controllerService.loadBalancerIP }}
@@ -28,15 +25,15 @@ spec:
   {{- end }}
   {{- if .Values.controllerService.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-{{ toYaml .Values.controllerService.loadBalancerSourceRanges | indent 4 }}
+    {{- toYaml .Values.controllerService.loadBalancerSourceRanges | nindent 4 }}
   {{- end -}}
 {{- else }}
   type: {{ .Values.controllerService.type }}
 {{- end }}
-{{- if .Values.controllerService.externalIPs }}
+  {{- if .Values.controllerService.externalIPs }}
   externalIPs:
-{{ toYaml .Values.controllerService.externalIPs | indent 4 }}
-{{- end }}
+    {{- toYaml .Values.controllerService.externalIPs | nindent 4 }}
+  {{- end }}
   {{- if .Values.controllerService.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.controllerService.externalTrafficPolicy }}
   {{- end }}
@@ -45,9 +42,9 @@ spec:
       targetPort: controller
       protocol: TCP
       name: controller
-{{ if (and (eq .Values.controllerService.type "NodePort") (not (empty .Values.controllerService.nodePort))) }}
+      {{- if (and (eq .Values.controllerService.type "NodePort") (not (empty .Values.controllerService.nodePort))) }}
       nodePort: {{.Values.controllerService.nodePort}}
-{{ end }}
+      {{- end }}
   selector:
     {{- include "unifi.selectorLabels" . | nindent 4 }}
-{{ end }}
+{{- end }}

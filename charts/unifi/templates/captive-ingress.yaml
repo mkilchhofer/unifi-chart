@@ -1,47 +1,41 @@
 {{- if (and .Values.captivePortalService.ingress.enabled (not .Values.unifiedService.enabled)) }}
 {{- $fullName := include "unifi.fullname" . -}}
-{{- $ingressPath := .Values.captivePortalService.ingress.path -}}
-{{- $unifiedServiceEnabled := .Values.unifiedService.enabled -}}
-{{- $captivePortalHttps := .Values.captivePortalService.https -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $fullName }}-captive
-  labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- with .Values.captivePortalService.ingress.annotations }}
+  {{- with .Values.captivePortalService.ingress.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
-spec:
-{{- if .Values.captivePortalService.ingress.tls }}
-  tls:
-  {{- range .Values.captivePortalService.ingress.tls }}
-    - hosts:
-      {{- range .hosts }}
-        - {{ . | quote }}
-      {{- end }}
-      secretName: {{ .secretName }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
-{{- end }}
+  labels:
+    {{- include "unifi.labels" . | nindent 4 }}
+spec:
   rules:
     {{- range .Values.captivePortalService.ingress.hosts }}
     - host: {{ . }}
       http:
         paths:
-          - path: {{ $ingressPath }}
+          - path: {{ $.Values.captivePortalService.ingress.path }}
             pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}-captiveportalservice
                 port:
-                  {{- if $captivePortalHttps }}
+                  {{- if $.Values.captivePortalService.https }}
                   name: captive-https
                   {{- else }}
                   name: captive-http
                   {{- end }}
     {{- end }}
+  {{- if .Values.captivePortalService.ingress.tls }}
+  tls:
+    {{- range .Values.captivePortalService.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . | quote }}
+      {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
 {{- end }}

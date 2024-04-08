@@ -1,26 +1,23 @@
-{{ if not .Values.unifiedService.enabled }}
+{{- if and .Values.stunService.enabled (not .Values.unifiedService.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "unifi.fullname" . }}-stun
   labels:
-    app.kubernetes.io/name: {{ include "unifi.name" . }}
-    helm.sh/chart: {{ include "unifi.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.stunService.labels }}
-{{ toYaml .Values.stunService.labels | indent 4 }}
-{{- end }}
-{{- with .Values.stunService.annotations }}
+    {{- include "unifi.labels" . | nindent 4 }}
+    {{- if .Values.stunService.labels }}
+    {{- toYaml .Values.stunService.labels | nindent 4 }}
+    {{- end }}
+  {{- with .Values.stunService.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+    {{ toYaml . | indent 4 }}
+  {{- end }}
 spec:
 {{- if (or (eq .Values.stunService.type "ClusterIP") (empty .Values.stunService.type)) }}
   type: ClusterIP
   {{- if .Values.stunService.clusterIP }}
   clusterIP: {{ .Values.stunService.clusterIP }}
-  {{end}}
+  {{- end }}
 {{- else if eq .Values.stunService.type "LoadBalancer" }}
   type: {{ .Values.stunService.type }}
   {{- if .Values.stunService.loadBalancerIP }}
@@ -28,15 +25,15 @@ spec:
   {{- end }}
   {{- if .Values.stunService.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-{{ toYaml .Values.stunService.loadBalancerSourceRanges | indent 4 }}
+    {{- toYaml .Values.stunService.loadBalancerSourceRanges | nindent 4 }}
   {{- end -}}
 {{- else }}
   type: {{ .Values.stunService.type }}
 {{- end }}
-{{- if .Values.stunService.externalIPs }}
+  {{- if .Values.stunService.externalIPs }}
   externalIPs:
-{{ toYaml .Values.stunService.externalIPs | indent 4 }}
-{{- end }}
+    {{- toYaml .Values.stunService.externalIPs | nindent 4 }}
+  {{- end }}
   {{- if .Values.stunService.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.stunService.externalTrafficPolicy }}
   {{- end }}
@@ -45,9 +42,9 @@ spec:
       targetPort: stun
       protocol: UDP
       name: stun
-{{ if (and (eq .Values.stunService.type "NodePort") (not (empty .Values.stunService.nodePort))) }}
+      {{- if (and (eq .Values.stunService.type "NodePort") (not (empty .Values.stunService.nodePort))) }}
       nodePort: {{.Values.stunService.nodePort}}
-{{ end }}
+      {{- end }}
   selector:
     {{- include "unifi.selectorLabels" . | nindent 4 }}
-{{ end }}
+{{- end }}
