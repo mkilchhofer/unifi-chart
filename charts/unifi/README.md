@@ -10,27 +10,15 @@ Ubiquiti Network's Unifi Controller
 
 ## Requirements
 
-Kubernetes: `>=1.18-0`
-
-## Dependencies
-
-| Repository | Name | Version |
-|------------|------|---------|
-
-## TL;DR
-
-```console
-helm repo add k8s-at-home https://k8s-at-home.com/charts/
-helm repo update
-helm install unifi k8s-at-home/unifi
-```
+- Helm: 3.8+ (due to OCI registry support)
+- Kubernetes: `>=1.18-0`
 
 ## Installing the Chart
 
 To install the chart with the release name `unifi`
 
 ```console
-helm install unifi k8s-at-home/unifi
+helm install unifi oci://ghcr.io/mkilchhofer/unifi-chart/unifi
 ```
 
 ## Uninstalling the Chart
@@ -104,118 +92,146 @@ ingress:
 
 ## Values
 
-**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/k8s-at-home/charts/tree/master/charts/common/)
-
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| GID | int | `999` |  |
-| UID | int | `999` |  |
-| affinity | object | `{}` |  |
+| GID | int | `999` | These GID (group id) the UniFi service runs as when `runAsRoot` is set to false |
+| UID | int | `999` | Set the UID (user id) the UniFi service runs as when `runAsRoot` is set to false |
+| affinity | object | `{}` | Affinity for pod assignment |
 | captivePortalService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
-| captivePortalService.enabled | bool | `false` |  |
+| captivePortalService.enabled | bool | `false` | Enable service for the captive portal webpage |
 | captivePortalService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
 | captivePortalService.http | int | `8880` | Kubernetes port where the http service is exposed |
 | captivePortalService.https | int | `8843` | Kubernetes port where the https service is exposed |
-| captivePortalService.ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
-| captivePortalService.labels | object | `{}` |  |
+| captivePortalService.ingress.annotations | object | `{}` | Annotations for Ingress resource |
+| captivePortalService.ingress.enabled | bool | `false` | Enable Ingress resource |
+| captivePortalService.ingress.hosts | list | `["chart-example.local"]` | Hostname(s) for the Ingress resource |
+| captivePortalService.ingress.path | string | `"/"` | Ingress path |
+| captivePortalService.ingress.tls | list | `[]` | Ingress TLS configuration |
+| captivePortalService.labels | object | `{}` | Labels to add to the captive portal service |
 | captivePortalService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | captivePortalService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | captivePortalService.type | string | `"ClusterIP"` | Kubernetes service type |
 | controllerService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
-| controllerService.enabled | bool | `false` |  |
+| controllerService.enabled | bool | `false` | Enable service for the controller |
 | controllerService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
-| controllerService.ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
-| controllerService.labels | object | `{}` |  |
+| controllerService.ingress.annotations | object | `{}` | Annotations for Ingress resource |
+| controllerService.ingress.enabled | bool | `false` | Enable Ingress resource |
+| controllerService.ingress.hosts | list | `["chart-example.local"]` | Hostname(s) for the Ingress resource |
+| controllerService.ingress.path | string | `"/"` | Ingress path |
+| controllerService.ingress.tls | list | `[]` | Ingress TLS configuration |
+| controllerService.labels | object | `{}` | Labels to add to the controller service |
 | controllerService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | controllerService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | controllerService.port | int | `8080` | Kubernetes port where the service is exposed |
 | controllerService.type | string | `"NodePort"` | Kubernetes service type |
-| customCert | object | `{"certName":"tls.crt","enabled":false,"isChain":false,"keyName":"tls.key"}` | If you provide your own custom certificate in <unifi-data>/cert you can define the following parameters to configure the controller |
-| deploymentAnnotations | object | `{}` |  |
+| customCert.certName | string | `"tls.crt"` | File name of the certificate |
+| customCert.certSecret | string | `""` | Load custom certificate from an existing Kubernetes secret. If you want to store certificate and its key as a Kubernetes tls secret you can pass the name of that secret using certSecret variable |
+| customCert.enabled | bool | `false` | Enable use of your own custom certificate in <unifi-data>/cert |
+| customCert.isChain | bool | `false` | Sets the CERT_IS_CHAIN environment variable. See [Certificate Support](https://github.com/jacobalberty/unifi-docker?tab=readme-ov-file#certificate-support) |
+| customCert.keyName | string | `"tls.key"` | File name of the private key for the certificate |
+| deploymentAnnotations | object | `{}` | Annotations for UniFi deployment |
 | discoveryService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
-| discoveryService.enabled | bool | `false` |  |
+| discoveryService.enabled | bool | `false` | Enable service for the discovery feature |
 | discoveryService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
-| discoveryService.ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
-| discoveryService.labels | object | `{}` |  |
+| discoveryService.ingress.annotations | object | `{}` | Annotations for Ingress resource |
+| discoveryService.ingress.enabled | bool | `false` | Enable Ingress resource |
+| discoveryService.ingress.hosts | list | `["chart-example.local"]` | Hostname(s) for the Ingress resource |
+| discoveryService.ingress.path | string | `"/"` | Ingress path |
+| discoveryService.ingress.tls | list | `[]` | Ingress TLS configuration |
+| discoveryService.labels | object | `{}` | Labels to add to the discovery service |
 | discoveryService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | discoveryService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | discoveryService.port | int | `10001` | Kubernetes port where the service is exposed |
 | discoveryService.type | string | `"NodePort"` | Kubernetes service type |
-| extraConfigFiles | object | `{}` |  |
-| extraJvmOpts | list | `[]` |  |
-| extraVolumeMounts | list | `[]` |  |
-| extraVolumes | list | `[]` |  |
+| extraConfigFiles | object | `{}` | Specify additional config files which are mounted to /configmap |
+| extraJvmOpts | list | `[]` | Extra java options |
+| extraVolumeMounts | list | `[]` | specify additional VolumeMount to be mounted inside unifi container |
+| extraVolumes | list | `[]` | specify additional volume to be used by extraVolumeMounts inside unifi container |
 | guiService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
-| guiService.enabled | bool | `false` |  |
+| guiService.enabled | bool | `false` | Enable service for the main web UI |
 | guiService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
-| guiService.labels | object | `{}` |  |
+| guiService.labels | object | `{}` | Labels to add to the GUI service |
 | guiService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | guiService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | guiService.nodePort | int | `nil` | Specify the nodePort value for the LoadBalancer and NodePort service types. ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport |
 | guiService.port | int | `8443` | Kubernetes port where the service is exposed |
 | guiService.type | string | `"ClusterIP"` | Kubernetes service type |
-| image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"jacobalberty/unifi"` |  |
-| image.tag | string | `"v5.14.23"` |  |
-| ingress | object | `{"annotations":{},"enabled":false,"hosts":["chart-example.local"],"path":"/","tls":[]}` | Ingress settings |
+| image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. One of `Always`, `Never`, `IfNotPresent` |
+| image.repository | string | `"jacobalberty/unifi"` | Container image name |
+| image.tag | string | `""` (use appVersion in `Chart.yaml`) | Container image tag |
+| ingress.annotations | object | `{}` | Annotations for Ingress resource |
+| ingress.enabled | bool | `false` | Enable Ingress resource |
+| ingress.hosts | list | `["chart-example.local"]` | Hostname(s) for the Ingress resource |
+| ingress.path | string | `"/"` | Ingress path |
+| ingress.tls | list | `[]` | Ingress TLS configuration |
 | jvmInitHeapSize | string | `nil` | Java Virtual Machine (JVM) initial, and minimum, heap size Unset value means there is no lower limit |
 | jvmMaxHeapSize | string | `"1024M"` | Java Virtual Machine (JVM) maximum heap size For larger installations a larger value is recommended. For memory constrained system this value can be lowered. |
-| livenessProbe | object | `{"enabled":true,"failureThreshold":3,"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1}` | Liveness probe values Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes |
-| logging | object | `{"promtail":{"enabled":false,"image":{"pullPolicy":"IfNotPresent","repository":"grafana/promtail","tag":"1.6.0"},"loki":{"url":"http://loki.logs.svc.cluster.local:3100/loki/api/v1/push"}}}` | Logging configuration |
-| mongodb | object | `{"databaseName":"unifi","dbUri":"mongodb://mongo/unifi","enabled":false,"statDbUri":"mongodb://mongo/unifi_stat"}` | define an external mongoDB instead of using the built-in mongodb |
-| nodeSelector | object | `{}` |  |
+| livenessProbe.enabled | bool | `true` | Enable liveness probe |
+| livenessProbe.failureThreshold | int | `3` | Minimum consecutive failures for the probe to be considered failed after having succeeded. |
+| livenessProbe.initialDelaySeconds | int | `30` | Number of seconds after the container has started before probes are initiated. |
+| livenessProbe.periodSeconds | int | `10` | How often (in seconds) to perform the probe. |
+| livenessProbe.successThreshold | int | `1` | Minimum consecutive successes for the probe to be considered successful after having failed. |
+| livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out. |
+| logging.promtail.enabled | bool | `false` | Enable promtail sidecar |
+| logging.promtail.image.pullPolicy | string | `"IfNotPresent"` | Promtail image pull policy. One of `Always`, `Never`, `IfNotPresent` |
+| logging.promtail.image.repository | string | `"grafana/promtail"` | Promtail container image name |
+| logging.promtail.image.tag | string | `"1.6.0"` | Promtail container image tag |
+| logging.promtail.loki.url | string | `"http://loki.logs.svc.cluster.local:3100/loki/api/v1/push"` | Loki backend for promtail sidecar |
+| mongodb.databaseName | string | `"unifi"` | Maps to `unifi.db.name` |
+| mongodb.dbUri | string | `"mongodb://mongo/unifi"` | Maps to `db.mongo.uri` |
+| mongodb.enabled | bool | `false` | Use external mongoDB instead of using the built-in mongodb |
+| mongodb.statDbUri | string | `"mongodb://mongo/unifi_stat"` | Maps to `statdb.mongo.uri` |
+| nodeSelector | object | `{}` | Node labels for pod assignment |
 | persistence.accessMode | string | `"ReadWriteOnce"` | Persistence access modes |
 | persistence.enabled | bool | `false` | Use persistent volume to store data |
 | persistence.existingClaim | string | `nil` | Use an existing PVC to persist data |
 | persistence.size | string | `"5Gi"` | Size of persistent volume claim |
 | persistence.skipuninstall | bool | `false` | Do not delete the pvc upon helm uninstall |
 | persistence.storageClass | string | `nil` | Type of persistent volume claim |
-| podAnnotations | object | `{}` |  |
-| readinessProbe | object | `{"enabled":true,"failureThreshold":3,"initialDelaySeconds":15,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1}` | Readiness probe values Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes |
-| resources | object | `{}` |  |
-| runAsRoot | bool | `false` |  |
+| podAnnotations | object | `{}` | Annotations for UniFi pod |
+| readinessProbe.enabled | bool | `true` | Enable readiness probe |
+| readinessProbe.failureThreshold | int | `3` | Minimum consecutive failures for the probe to be considered failed after having succeeded. |
+| readinessProbe.initialDelaySeconds | int | `15` | Number of seconds after the container has started before probes are initiated. |
+| readinessProbe.periodSeconds | int | `10` | How often (in seconds) to perform the probe. |
+| readinessProbe.successThreshold | int | `1` | Minimum consecutive successes for the probe to be considered successful after having failed. |
+| readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out. |
+| resources | object | `{}` | Set container requests and limits for different resources like CPU or memory |
+| runAsRoot | bool | `false` | This is used to determine whether or not the UniFi service runs as a privileged (root) user. The default value is `true` but it is recommended to use `false` instead. |
 | speedtestService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
-| speedtestService.enabled | bool | `false` |  |
+| speedtestService.enabled | bool | `false` | Enable service for mobile speedtest inside the UniFi Mobile app |
 | speedtestService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
-| speedtestService.labels | object | `{}` |  |
+| speedtestService.labels | object | `{}` | Labels to add to the speedtest service |
 | speedtestService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | speedtestService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | speedtestService.port | int | `6789` | Kubernetes port where the service is exposed |
 | speedtestService.type | string | `"ClusterIP"` | Kubernetes service type |
 | strategyType | string | `"Recreate"` | upgrade strategy type (e.g. Recreate or RollingUpdate) |
 | stunService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
-| stunService.enabled | bool | `false` |  |
+| stunService.enabled | bool | `false` | Enable service the STUN feature |
 | stunService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
-| stunService.labels | object | `{}` |  |
+| stunService.labels | object | `{}` | Labels to add to the STUN service |
 | stunService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | stunService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | stunService.port | int | `3478` | Kubernetes port where the service is exposed |
 | stunService.type | string | `"NodePort"` | Kubernetes service type |
 | syslogService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
-| syslogService.enabled | bool | `false` |  |
+| syslogService.enabled | bool | `false` | Enable service for the syslog server. Used to capture syslog from Unifi devices if the feature is enabled in the site configuration. |
 | syslogService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
-| syslogService.labels | object | `{}` |  |
+| syslogService.labels | object | `{}` | Labels to add to the syslog service |
 | syslogService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | syslogService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | syslogService.port | int | `5514` | Kubernetes port where the service is exposed |
 | syslogService.type | string | `"NodePort"` | Kubernetes service type |
-| timezone | string | `"UTC"` |  |
-| tolerations | list | `[]` |  |
+| timezone | string | `"UTC"` | Timezone for UniFi controller |
+| tolerations | list | `[]` | Tolerations for pod assignment |
 | unifiedService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
-| unifiedService.enabled | bool | `false` |  |
+| unifiedService.enabled | bool | `false` | Create a unified service instead of dedicated services. If enabled, the controller, discovery, GUI, STUN and syslog services will not be created. |
 | unifiedService.externalTrafficPolicy | string | `nil` | Set the externalTrafficPolicy in the Service to either Cluster or Local |
-| unifiedService.labels | object | `{}` |  |
+| unifiedService.labels | object | `{}` | Labels to add to the unified service |
 | unifiedService.loadBalancerIP | string | `nil` | Use loadBalancerIP to request a specific static IP, otherwise leave blank |
 | unifiedService.loadBalancerSourceRanges | list | `nil` | loadBalancerSourceRanges |
 | unifiedService.nodePort | int | `nil` | Specify the nodePort value for the LoadBalancer and NodePort service types. ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport |
 | unifiedService.type | string | `"ClusterIP"` | Kubernetes service type |
-
-## Support
-
-- See the [Docs](https://docs.k8s-at-home.com/our-helm-charts/getting-started/)
-- Open an [issue](https://github.com/k8s-at-home/charts/issues/new/choose)
-- Ask a [question](https://github.com/k8s-at-home/organization/discussions)
-- Join our [Discord](https://discord.gg/sTMX7Vh) community
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.9.1](https://github.com/norwoodj/helm-docs/releases/v1.9.1)
