@@ -50,3 +50,11 @@ Selector labels
 app.kubernetes.io/name: {{ include "unifi.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "unifi.securityContext.SETFCAP" }}
+  {{- if .Values.bindPrivilegedPorts }}
+capabilities:
+  add:
+  - SETFCAP
+  {{- end }}
+{{- end }}

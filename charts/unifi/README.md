@@ -96,6 +96,7 @@ ingress:
 | GID | int | `999` | These GID (group id) the UniFi service runs as when `runAsRoot` is set to false |
 | UID | int | `999` | Set the UID (user id) the UniFi service runs as when `runAsRoot` is set to false |
 | affinity | object | `{}` | Assign custom [affinity] rules to the deployment |
+| bindPrivilegedPorts | bool | `true` | Allow listening on privileged ports. Required when `controllerService.port` or `guiService.port` is less than 1024. |
 | captivePortalService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | captivePortalService.enabled | bool | `true` | Enable service for the captive portal webpage |
 | captivePortalService.externalTrafficPolicy | string | `""` | Set the externalTrafficPolicy in the Service to either `Cluster` or `Local` |
@@ -183,6 +184,7 @@ ingress:
 | persistence.skipuninstall | bool | `true` | Do not delete the PVC upon helm uninstall by adding the `helm.sh/resource-policy: keep` annotation. |
 | persistence.storageClass | string | `""` | Storage Class to use for the PVC |
 | podAnnotations | object | `{}` | Annotations for UniFi pod |
+| podSecurityContext | object | `{}` | Set pod-level security context |
 | readinessProbe.enabled | bool | `true` | Enable readiness [probe] |
 | readinessProbe.failureThreshold | int | `3` | Minimum consecutive failures for the [probe] to be considered failed after having succeeded. |
 | readinessProbe.initialDelaySeconds | int | `15` | Number of seconds after the container has started before probes are initiated. |
@@ -191,6 +193,7 @@ ingress:
 | readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the [probe] times out. |
 | resources | object | `{}` | Set container requests and limits for different resources like CPU or memory |
 | runAsRoot | bool | `false` | This is used to determine whether or not the UniFi service runs as a privileged (root) user. The default value is `true` but it is recommended to use `false` instead. |
+| securityContext | object | `{}` | Set container-level security context. The parameter `bindPrivilegedPorts=true` will add the `SETFCAP` capability automatically. |
 | speedtestService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | speedtestService.enabled | bool | `true` | Enable service for mobile speedtest inside the UniFi Mobile app |
 | speedtestService.externalTrafficPolicy | string | `""` | Set the externalTrafficPolicy in the Service to either `Cluster` or `Local` |
