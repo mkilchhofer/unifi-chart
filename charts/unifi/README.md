@@ -105,6 +105,7 @@ ingress:
 | captivePortalService.ingress.annotations | object | `{}` | Annotations for Ingress resource |
 | captivePortalService.ingress.enabled | bool | `false` | Enable Ingress resource |
 | captivePortalService.ingress.hosts | list | `["unifi-captive.example.com"]` | Hostname(s) for the Ingress resource |
+| captivePortalService.ingress.ingressClassName | string | `""` | Defines which ingress controller will implement the resource |
 | captivePortalService.ingress.path | string | `"/"` | Ingress path |
 | captivePortalService.ingress.tls | list | `[]` | Ingress TLS configuration |
 | captivePortalService.labels | object | `{}` | Labels to add to the captive portal service |
@@ -117,6 +118,7 @@ ingress:
 | controllerService.ingress.annotations | object | `{}` | Annotations for Ingress resource |
 | controllerService.ingress.enabled | bool | `false` | Enable Ingress resource |
 | controllerService.ingress.hosts | list | `["unifi-controller.example.com"]` | Hostname(s) for the Ingress resource |
+| controllerService.ingress.ingressClassName | string | `""` | Defines which ingress controller will implement the resource |
 | controllerService.ingress.path | string | `"/"` | Ingress path |
 | controllerService.ingress.tls | list | `[]` | Ingress TLS configuration |
 | controllerService.labels | object | `{}` | Labels to add to the controller service |
@@ -157,6 +159,7 @@ ingress:
 | ingress.annotations | object | `{}` | Annotations for Ingress resource |
 | ingress.enabled | bool | `true` | Enable Ingress resource |
 | ingress.hosts | list | `["unifi.example.com"]` | Hostname(s) for the Ingress resource |
+| ingress.ingressClassName | string | `""` | Defines which ingress controller will implement the resource |
 | ingress.path | string | `"/"` | Ingress path |
 | ingress.tls | list | `[]` | Ingress TLS configuration |
 | jvmInitHeapSize | string | `""` | Java Virtual Machine (JVM) initial, and minimum, heap size. Unset value means there is no lower limit |

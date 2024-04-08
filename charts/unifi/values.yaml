@@ -103,6 +103,8 @@ captivePortalService:
   ingress:
     # -- Enable Ingress resource
     enabled: false
+    # -- Defines which ingress controller will implement the resource
+    ingressClassName: ""
     # -- Annotations for Ingress resource
     annotations: {}
     # -- Ingress path
@@ -141,6 +143,8 @@ controllerService:
   ingress:
     # -- Enable Ingress resource
     enabled: false
+    # -- Defines which ingress controller will implement the resource
+    ingressClassName: ""
     # -- Annotations for Ingress resource
     annotations: {}
     # -- Ingress path
@@ -243,6 +247,8 @@ speedtestService:
 ingress:
   # -- Enable Ingress resource
   enabled: true
+  # -- Defines which ingress controller will implement the resource
+  ingressClassName: ""
   # -- Annotations for Ingress resource
   annotations: {}
   # -- Ingress path
