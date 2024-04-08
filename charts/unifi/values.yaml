@@ -1,4 +1,4 @@
-# Default values for unifi.
+# Default values for UniFi helm chart.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -30,7 +30,7 @@ unifiedService:
   # -- (int) Specify the nodePort value for the LoadBalancer and NodePort service types.
   # ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   #
-  nodePort:
+  nodePort: ~
   # -- Provide any additional annotations which may be required. This can be used to
   # set the LoadBalancer service type to internal only.
   # ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -39,11 +39,11 @@ unifiedService:
   labels: {}
   # -- Use loadBalancerIP to request a specific static IP,
   # otherwise leave blank
-  loadBalancerIP:
-  # -- (list) loadBalancerSourceRanges
-  loadBalancerSourceRanges:
-  # -- Set the externalTrafficPolicy in the Service to either Cluster or Local
-  externalTrafficPolicy:
+  loadBalancerIP: ""
+  # -- If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs.
+  loadBalancerSourceRanges: []
+  # -- Set the externalTrafficPolicy in the Service to either `Cluster` or `Local`
+  externalTrafficPolicy: ""
 
 guiService:
   # -- Enable service for the main web UI
@@ -55,7 +55,7 @@ guiService:
   # -- (int) Specify the nodePort value for the LoadBalancer and NodePort service types.
   # ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   #
-  nodePort:
+  nodePort: ~
   # -- Provide any additional annotations which may be required. This can be used to
   # set the LoadBalancer service type to internal only.
   # ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -64,11 +64,11 @@ guiService:
   labels: {}
   # -- Use loadBalancerIP to request a specific static IP,
   # otherwise leave blank
-  loadBalancerIP:
-  # -- (list) loadBalancerSourceRanges
-  loadBalancerSourceRanges:
-  # -- Set the externalTrafficPolicy in the Service to either Cluster or Local
-  externalTrafficPolicy:
+  loadBalancerIP: ""
+  # -- If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs.
+  loadBalancerSourceRanges: []
+  # -- Set the externalTrafficPolicy in the Service to either `Cluster` or `Local`
+  externalTrafficPolicy: ""
 
 captivePortalService:
   # -- Enable service for the captive portal webpage
@@ -87,11 +87,11 @@ captivePortalService:
   labels: {}
   # -- Use loadBalancerIP to request a specific static IP,
   # otherwise leave blank
-  loadBalancerIP:
-  # -- (list) loadBalancerSourceRanges
-  loadBalancerSourceRanges:
-  # -- Set the externalTrafficPolicy in the Service to either Cluster or Local
-  externalTrafficPolicy:
+  loadBalancerIP: ""
+  # -- If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs.
+  loadBalancerSourceRanges: []
+  # -- Set the externalTrafficPolicy in the Service to either `Cluster` or `Local`
+  externalTrafficPolicy: ""
 
   ## Ingress settings
   ingress:
@@ -103,9 +103,12 @@ captivePortalService:
     path: /
     # -- Hostname(s) for the Ingress resource
     hosts:
-      - chart-example.local
+      - unifi-captive.example.com
     # -- Ingress TLS configuration
     tls: []
+      # - secretName: captive-tls
+      #   hosts:
+      #     - unifi-captive.example.com
 
 controllerService:
   # -- Enable service for the controller
@@ -122,11 +125,11 @@ controllerService:
   labels: {}
   # -- Use loadBalancerIP to request a specific static IP,
   # otherwise leave blank
-  loadBalancerIP:
-  # -- (list) loadBalancerSourceRanges
-  loadBalancerSourceRanges:
-  # -- Set the externalTrafficPolicy in the Service to either Cluster or Local
-  externalTrafficPolicy:
+  loadBalancerIP: ""
+  # -- If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs.
+  loadBalancerSourceRanges: []
+  # -- Set the externalTrafficPolicy in the Service to either `Cluster` or `Local`
+  externalTrafficPolicy: ""
 
   ## Ingress settings
   ingress:
@@ -138,9 +141,12 @@ controllerService:
     path: /
     # -- Hostname(s) for the Ingress resource
     hosts:
-      - chart-example.local
+      - unifi-controller.example.com
     # -- Ingress TLS configuration
     tls: []
+      # - secretName: controller-tls
+      #   hosts:
+      #     - unifi-controller.example.com
 
 stunService:
   # -- Enable service the STUN feature
@@ -157,11 +163,11 @@ stunService:
   labels: {}
   # -- Use loadBalancerIP to request a specific static IP,
   # otherwise leave blank
-  loadBalancerIP:
-  # -- (list) loadBalancerSourceRanges
-  loadBalancerSourceRanges:
-  # -- Set the externalTrafficPolicy in the Service to either Cluster or Local
-  externalTrafficPolicy:
+  loadBalancerIP: ""
+  # -- If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs.
+  loadBalancerSourceRanges: []
+  # -- Set the externalTrafficPolicy in the Service to either `Cluster` or `Local`
+  externalTrafficPolicy: ""
 
 discoveryService:
   # -- Enable service for the discovery feature
@@ -178,30 +184,15 @@ discoveryService:
   labels: {}
   # -- Use loadBalancerIP to request a specific static IP,
   # otherwise leave blank
-  loadBalancerIP:
-  # -- (list) loadBalancerSourceRanges
-  loadBalancerSourceRanges:
-  # -- Set the externalTrafficPolicy in the Service to either Cluster or Local
-  externalTrafficPolicy:
-
-
-  ## Ingress settings
-  ingress:
-    # -- Enable Ingress resource
-    enabled: false
-    # -- Annotations for Ingress resource
-    annotations: {}
-    # -- Ingress path
-    path: /
-    # -- Hostname(s) for the Ingress resource
-    hosts:
-      - chart-example.local
-    # -- Ingress TLS configuration
-    tls: []
+  loadBalancerIP: ""
+  # -- If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs.
+  loadBalancerSourceRanges: []
+  # -- Set the externalTrafficPolicy in the Service to either `Cluster` or `Local`
+  externalTrafficPolicy: ""
 
 syslogService:
   # -- Enable service for the syslog server.
-  # Used to capture syslog from Unifi devices if the feature is enabled in the site configuration.
+  # Used to capture syslog from UniFi devices if the feature is enabled in the site configuration.
   enabled: true
   # -- Kubernetes service type
   type: NodePort
@@ -215,11 +206,11 @@ syslogService:
   labels: {}
   # -- Use loadBalancerIP to request a specific static IP,
   # otherwise leave blank
-  loadBalancerIP:
-  # -- (list) loadBalancerSourceRanges
-  loadBalancerSourceRanges:
-  # -- Set the externalTrafficPolicy in the Service to either Cluster or Local
-  externalTrafficPolicy:
+  loadBalancerIP: ""
+  # -- If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs.
+  loadBalancerSourceRanges: []
+  # -- Set the externalTrafficPolicy in the Service to either `Cluster` or `Local`
+  externalTrafficPolicy: ""
 
 speedtestService:
   # -- Enable service for mobile speedtest inside the UniFi Mobile app
@@ -236,12 +227,11 @@ speedtestService:
   labels: {}
   # -- Use loadBalancerIP to request a specific static IP,
   # otherwise leave blank
-  loadBalancerIP:
-  # -- (list) loadBalancerSourceRanges
-  loadBalancerSourceRanges:
-  # -- Set the externalTrafficPolicy in the Service to either Cluster or Local
-  externalTrafficPolicy:
-
+  loadBalancerIP: ""
+  # -- If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs.
+  loadBalancerSourceRanges: []
+  # -- Set the externalTrafficPolicy in the Service to either `Cluster` or `Local`
+  externalTrafficPolicy: ""
 
 ## Ingress settings
 ingress:
@@ -253,12 +243,12 @@ ingress:
   path: /
   # -- Hostname(s) for the Ingress resource
   hosts:
-    - chart-example.local
+    - unifi.example.com
   # -- Ingress TLS configuration
   tls: []
-    # - secretName: chart-example-tls
+    # - secretName: example-tls
     #   hosts:
-    #     - chart-example.local
+    #     - unifi.example.com
 
 # -- Timezone for UniFi controller
 timezone: UTC
@@ -325,8 +315,9 @@ persistence:
   accessMode: ReadWriteOnce
   # -- Size of persistent volume claim
   size: 5Gi
-  # -- Do not delete the pvc upon helm uninstall
-  skipuninstall: false
+  # -- Do not delete the PVC upon helm uninstall by adding
+  # the `helm.sh/resource-policy: keep` annotation.
+  skipuninstall: true
 
 # -- specify additional volume to be used by extraVolumeMounts inside unifi container
 extraVolumes: []
@@ -348,9 +339,9 @@ extraJvmOpts: []
   # - "-Dlog4j.configurationFile=file:/configmap/log4j2.xml"
   # - "-Dsystem_ip=1.2.3.4"
 
-# -- Java Virtual Machine (JVM) initial, and minimum, heap size
+# -- Java Virtual Machine (JVM) initial, and minimum, heap size.
 # Unset value means there is no lower limit
-jvmInitHeapSize:
+jvmInitHeapSize: ""
 
 # -- Java Virtual Machine (JVM) maximum heap size
 # For larger installations a larger value is recommended.
@@ -402,42 +393,42 @@ resources: {}
 # Liveness probe values
 # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 livenessProbe:
-  # -- Enable liveness probe
+  # -- Enable liveness [probe]
   enabled: true
   # -- Number of seconds after the container has started before probes are initiated.
   initialDelaySeconds: 30
-  # -- How often (in seconds) to perform the probe.
+  # -- How often (in seconds) to perform the [probe].
   periodSeconds: 10
-  # -- Number of seconds after which the probe times out.
+  # -- Number of seconds after which the [probe] times out.
   timeoutSeconds: 1
-  # -- Minimum consecutive failures for the probe to be considered failed after having succeeded.
+  # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded.
   failureThreshold: 3
-  # -- Minimum consecutive successes for the probe to be considered successful after having failed.
+  # -- Minimum consecutive successes for the [probe] to be considered successful after having failed.
   successThreshold: 1
 
 # Readiness probe values
 # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 readinessProbe:
-  # -- Enable readiness probe
+  # -- Enable readiness [probe]
   enabled: true
   # -- Number of seconds after the container has started before probes are initiated.
   initialDelaySeconds: 15
-  # -- How often (in seconds) to perform the probe.
+  # -- How often (in seconds) to perform the [probe].
   periodSeconds: 10
-  # -- Number of seconds after which the probe times out.
+  # -- Number of seconds after which the [probe] times out.
   timeoutSeconds: 1
-  # -- Minimum consecutive failures for the probe to be considered failed after having succeeded.
+  # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded.
   failureThreshold: 3
-  # -- Minimum consecutive successes for the probe to be considered successful after having failed.
+  # -- Minimum consecutive successes for the [probe] to be considered successful after having failed.
   successThreshold: 1
 
-# -- Node labels for pod assignment
+# -- [Node selector] for pod assignment
 nodeSelector: {}
 
-# -- Tolerations for pod assignment
+# -- [Tolerations] for pod assignment
 tolerations: []
 
-# -- Affinity for pod assignment
+# -- Assign custom [affinity] rules to the deployment
 affinity: {}
 
 # -- Annotations for UniFi pod

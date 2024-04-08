@@ -31,8 +31,7 @@ The command removes all the Kubernetes components associated with the chart **in
 
 ## Configuration
 
-Read through the [values.yaml](./values.yaml) file. It has several commented out suggested values.
-Other values may be used from the [values.yaml](../common/values.yaml) from the [common library](../common).
+Read through the [values.yaml] file. It has several commented out suggested values.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
@@ -79,9 +78,9 @@ helm install unifi oci://ghcr.io/mkilchhofer/unifi-chart/unifi -f values.yaml
 Unifi does [not support HTTP][unifi] so if you wish to use the guiService, you
 need to ensure that you use a backend transport of HTTPS.
 
-An example entry in `values.yaml` to achieve this is as follows:
+An example entry in `values.yaml` to achieve this using the [Ingress-Nginx Controller] is as follows:
 
-```
+```yaml
 ingress:
   enabled: true
   annotations:
@@ -93,3 +92,13 @@ ingress:
 {{ template "chart.valuesTable" . }}
 
 {{ template "helm-docs.versionFooter" . }}
+
+[ubnt 3]: https://help.ubnt.com/hc/en-us/articles/204976094-UniFi-What-protocol-does-the-controller-use-to-communicate-with-the-UAP-
+[ubnt 4]: https://help.ubnt.com/hc/en-us/articles/115015457668-UniFi-Troubleshooting-STUN-Communication-Errors
+[unifi]: https://community.ui.com/questions/Controller-how-to-deactivate-http-to-https/c5e247d8-b5b9-4c84-a3bb-28a90fd65668
+[affinity]: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
+[Ingress-Nginx Controller]: https://kubernetes.github.io/ingress-nginx/
+[Node selector]: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+[probe]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+[Tolerations]: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+[values.yaml]: values.yaml

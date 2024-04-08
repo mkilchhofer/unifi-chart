@@ -3,7 +3,7 @@ appVersion: v7.5.176
 kubeVersion: ">=1.18-0"
 description: Ubiquiti Network's Unifi Controller
 name: unifi
-version: 1.7.1
+version: 1.7.2
 keywords:
   - ubiquiti
   - unifi
