@@ -7,7 +7,7 @@ strategyType: Recreate
 
 image:
   # -- Container image name
-  repository: jacobalberty/unifi
+  repository: ghcr.io/jacobalberty/unifi-docker
   # -- Container image tag
   # @default -- `""` (use appVersion in `Chart.yaml`)
   tag: ""

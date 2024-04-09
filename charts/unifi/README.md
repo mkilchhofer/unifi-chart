@@ -154,7 +154,7 @@ ingress:
 | guiService.port | int | `8443` | Kubernetes port where the service is exposed |
 | guiService.type | string | `"ClusterIP"` | Kubernetes service type |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. One of `Always`, `Never`, `IfNotPresent` |
-| image.repository | string | `"jacobalberty/unifi"` | Container image name |
+| image.repository | string | `"ghcr.io/jacobalberty/unifi-docker"` | Container image name |
 | image.tag | string | `""` (use appVersion in `Chart.yaml`) | Container image tag |
 | ingress.annotations | object | `{}` | Annotations for Ingress resource |
 | ingress.enabled | bool | `true` | Enable Ingress resource |
