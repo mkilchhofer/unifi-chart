@@ -154,7 +154,7 @@ ingress:
 | guiService.port | int | `8443` | Kubernetes port where the service is exposed |
 | guiService.type | string | `"ClusterIP"` | Kubernetes service type |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. One of `Always`, `Never`, `IfNotPresent` |
-| image.repository | string | `"jacobalberty/unifi"` | Container image name |
+| image.repository | string | `"ghcr.io/jacobalberty/unifi-docker"` | Container image name |
 | image.tag | string | `""` (use appVersion in `Chart.yaml`) | Container image tag |
 | ingress.annotations | object | `{}` | Annotations for Ingress resource |
 | ingress.enabled | bool | `true` | Enable Ingress resource |
@@ -166,7 +166,7 @@ ingress:
 | jvmMaxHeapSize | string | `"1024M"` | Java Virtual Machine (JVM) maximum heap size For larger installations a larger value is recommended. For memory constrained system this value can be lowered. |
 | livenessProbe.enabled | bool | `true` | Enable liveness [probe] |
 | livenessProbe.failureThreshold | int | `3` | Minimum consecutive failures for the [probe] to be considered failed after having succeeded. |
-| livenessProbe.initialDelaySeconds | int | `30` | Number of seconds after the container has started before probes are initiated. |
+| livenessProbe.initialDelaySeconds | int | `0` | Number of seconds after the container has started before probes are initiated. |
 | livenessProbe.periodSeconds | int | `10` | How often (in seconds) to perform the [probe]. |
 | livenessProbe.successThreshold | int | `1` | Minimum consecutive successes for the [probe] to be considered successful after having failed. |
 | livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the [probe] times out. |
@@ -190,7 +190,7 @@ ingress:
 | podSecurityContext | object | `{}` | Set pod-level security context |
 | readinessProbe.enabled | bool | `true` | Enable readiness [probe] |
 | readinessProbe.failureThreshold | int | `3` | Minimum consecutive failures for the [probe] to be considered failed after having succeeded. |
-| readinessProbe.initialDelaySeconds | int | `15` | Number of seconds after the container has started before probes are initiated. |
+| readinessProbe.initialDelaySeconds | int | `0` | Number of seconds after the container has started before probes are initiated. |
 | readinessProbe.periodSeconds | int | `10` | How often (in seconds) to perform the [probe]. |
 | readinessProbe.successThreshold | int | `1` | Minimum consecutive successes for the [probe] to be considered successful after having failed. |
 | readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the [probe] times out. |
@@ -205,6 +205,10 @@ ingress:
 | speedtestService.loadBalancerSourceRanges | list | `[]` | If specified and supported by the platform, this will restrict traffic through the load-balancer to the specified client IPs. |
 | speedtestService.port | int | `6789` | Kubernetes port where the service is exposed |
 | speedtestService.type | string | `"ClusterIP"` | Kubernetes service type |
+| startupProbe.enabled | bool | `true` | Enable startup [probe]. **Set** `livenessProbe.initialDelaySeconds` **to at least `30` if you decide to disable the startupProbe!** Max startup delay is `failureThreshold * periodSeconds`. |
+| startupProbe.failureThreshold | int | `60` | Minimum consecutive failures for the [probe] to be considered failed after having succeeded. |
+| startupProbe.periodSeconds | int | `5` | How often (in seconds) to perform the [probe]. |
+| startupProbe.timeoutSeconds | int | `1` | Number of seconds after which the [probe] times out. |
 | strategyType | string | `"Recreate"` | upgrade strategy type (e.g. Recreate or RollingUpdate) |
 | stunService.annotations | object | `{}` | Provide any additional annotations which may be required. This can be used to set the LoadBalancer service type to internal only. ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer |
 | stunService.enabled | bool | `true` | Enable service the STUN feature |
