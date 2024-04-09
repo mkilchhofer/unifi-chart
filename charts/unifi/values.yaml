@@ -409,7 +409,7 @@ livenessProbe:
   # -- Enable liveness [probe]
   enabled: true
   # -- Number of seconds after the container has started before probes are initiated.
-  initialDelaySeconds: 30
+  initialDelaySeconds: 0
   # -- How often (in seconds) to perform the [probe].
   periodSeconds: 10
   # -- Number of seconds after which the [probe] times out.
@@ -425,7 +425,7 @@ readinessProbe:
   # -- Enable readiness [probe]
   enabled: true
   # -- Number of seconds after the container has started before probes are initiated.
-  initialDelaySeconds: 15
+  initialDelaySeconds: 0
   # -- How often (in seconds) to perform the [probe].
   periodSeconds: 10
   # -- Number of seconds after which the [probe] times out.
@@ -434,6 +434,18 @@ readinessProbe:
   failureThreshold: 3
   # -- Minimum consecutive successes for the [probe] to be considered successful after having failed.
   successThreshold: 1
+
+# Startup probe values
+# Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+startupProbe:
+  # -- Enable startup [probe]. **Set** `livenessProbe.initialDelaySeconds` **to at least `30` if you decide to disable the startupProbe!** Max startup delay is `failureThreshold * periodSeconds`.
+  enabled: true
+  # -- How often (in seconds) to perform the [probe].
+  periodSeconds: 5
+  # -- Number of seconds after which the [probe] times out.
+  timeoutSeconds: 1
+  # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded.
+  failureThreshold: 60
 
 # -- [Node selector] for pod assignment
 nodeSelector: {}
