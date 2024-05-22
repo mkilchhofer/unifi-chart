@@ -1,8 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "kubernetes": {
-    "fileMatch": ["\\.yaml$", "\\.yml$"]
-  },
   "extends": [
     "config:recommended",
     "docker:enableMajor"
