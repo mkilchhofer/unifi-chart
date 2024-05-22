@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "kubernetes": {
+    "fileMatch": ["\\.yaml$", "\\.yml$"]
+  },
+  "extends": [
+    "config:recommended",
+    "docker:enableMajor"
+  ],
+  "labels": ["renovate"],
+  "includePaths": [
+    "**/.github/workflows/renovate.yaml"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|\\/).*\\.ya?ml$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\s+.+[vV]ersion: (?<currentValue>.*)"
+      ]
+    }
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["jacobalberty/unifi-docker"],
+      "postUpgradeTasks": {
+        "commands": ["./scripts/renovate-bump-version.sh unifi"]
+      }
+    },
+    {
+      "matchPackageNames": ["ghcr.io/renovatebot/renovate"],
+      "extends": ["schedule:monthly"]
+    }
+  ]
+}
