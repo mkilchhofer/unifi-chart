@@ -1,0 +1,3 @@
+logging:
+  promtail:
+    enabled: true
