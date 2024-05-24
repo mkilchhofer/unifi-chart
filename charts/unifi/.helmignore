@@ -21,3 +21,7 @@
 *.tmproj
 # OWNERS file for Kubernetes
 OWNERS
+# Chart testing
+ci/
+# README template
+*.gotmpl
