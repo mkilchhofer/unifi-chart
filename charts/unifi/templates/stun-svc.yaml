@@ -10,7 +10,7 @@ metadata:
     {{- end }}
   {{- with .Values.stunService.annotations }}
   annotations:
-    {{ toYaml . | indent 4 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
 {{- if (or (eq .Values.stunService.type "ClusterIP") (empty .Values.stunService.type)) }}
