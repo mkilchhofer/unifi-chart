@@ -450,6 +450,9 @@ startupProbe:
 # -- [Node selector] for pod assignment
 nodeSelector: {}
 
+# -- [Priority Class Name] for pod
+priorityClassName: ""
+
 # -- [Tolerations] for pod assignment
 tolerations: []
 
