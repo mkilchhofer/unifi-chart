@@ -4,7 +4,7 @@ appVersion: v9.0.108
 kubeVersion: ">=1.18-0"
 description: Ubiquiti Network's Unifi Controller
 name: unifi
-version: 1.11.1
+version: 1.12.0
 keywords:
   - ubiquiti
   - unifi
