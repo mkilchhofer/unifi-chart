@@ -173,7 +173,7 @@ ingress:
 | logging.promtail.enabled | bool | `false` | Enable promtail sidecar |
 | logging.promtail.image.pullPolicy | string | `"IfNotPresent"` | Promtail image pull policy. One of `Always`, `Never`, `IfNotPresent` |
 | logging.promtail.image.repository | string | `"grafana/promtail"` | Promtail container image name |
-| logging.promtail.image.tag | string | `"3.3.0"` | Promtail container image tag |
+| logging.promtail.image.tag | string | `"3.3.2"` | Promtail container image tag |
 | logging.promtail.loki.url | string | `"http://loki.logs.svc.cluster.local:3100/loki/api/v1/push"` | Loki backend for promtail sidecar |
 | mongodb.databaseName | string | `"unifi"` | Maps to `unifi.db.name` |
 | mongodb.dbUri | string | `"mongodb://mongo/unifi"` | Maps to `db.mongo.uri` |
