@@ -12,8 +12,8 @@ permissions:
   contents: read
 
 env:
-  CR_VERSION: "1.6.1"
-  CR_SHASUM: "d4a2ffa825ff1b60a1cce819ce87eec337cf16059ca3d8a053e20cac39cf9e0a"
+  CR_VERSION: "1.8.1"
+  CR_SHASUM: "834046b27b00cd6ba451326875c1937d4f2b671063c2053e031434ade73002b5"
   HELM_REPO: unifi-chart
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 # v3.5
         with:
-          version: v3.10.1 # Also update in lint-and-test.yaml
+          version: v3.18.4 # Also update in lint-and-test.yaml
 
       - name: Configure Git
         run: |
