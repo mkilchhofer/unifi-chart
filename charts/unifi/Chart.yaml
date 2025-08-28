@@ -1,10 +1,10 @@
 apiVersion: v2
 # renovate: datasource=github-releases depName=jacobalberty/unifi-docker
-appVersion: v9.3.43
+appVersion: v9.4.19
 kubeVersion: ">=1.18-0"
 description: Ubiquiti Network's Unifi Controller
 name: unifi
-version: 1.13.2
+version: 1.14.0
 keywords:
   - ubiquiti
   - unifi
