@@ -332,6 +332,13 @@ persistence:
   # the `helm.sh/resource-policy: keep` annotation.
   skipuninstall: true
 
+# -- Additional container environment variables to apply to unifi container
+extraEnvVars: []
+# Example setting proxy
+# extraEnvVars:
+# - name: HTTPS_PROXY
+#   value: 'https://proxy.example.com:3128'
+
 # -- specify additional volume to be used by extraVolumeMounts inside unifi container
 extraVolumes: []
   # - name: additional-volume
