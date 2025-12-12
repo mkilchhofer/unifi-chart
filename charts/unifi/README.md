@@ -141,6 +141,7 @@ ingress:
 | discoveryService.port | int | `10001` | Kubernetes port where the service is exposed |
 | discoveryService.type | string | `"NodePort"` | Kubernetes service type |
 | extraConfigFiles | object | `{}` | Specify additional config files which are mounted to /configmap |
+| extraEnvVars | list | `[]` | Additional container environment variables to apply to unifi container |
 | extraJvmOpts | list | `[]` | Extra java options |
 | extraVolumeMounts | list | `[]` | specify additional VolumeMount to be mounted inside unifi container |
 | extraVolumes | list | `[]` | specify additional volume to be used by extraVolumeMounts inside unifi container |
