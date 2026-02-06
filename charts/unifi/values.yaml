@@ -299,7 +299,7 @@ logging:
       # -- Promtail container image name
       repository: grafana/promtail
       # -- Promtail container image tag
-      tag: 3.5.1
+      tag: 3.6.5
       # -- Promtail image pull policy. One of `Always`, `Never`, `IfNotPresent`
       pullPolicy: IfNotPresent
     loki:
