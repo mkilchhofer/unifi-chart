@@ -4,7 +4,8 @@ appVersion: v10.0.162
 kubeVersion: ">=1.18-0"
 description: Ubiquiti Network's Unifi Controller
 name: unifi
-version: 1.16.0
+version: 1.16.1
+deprecated: true
 keywords:
   - ubiquiti
   - unifi
